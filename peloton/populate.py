@@ -13,7 +13,7 @@ from typing import List, NamedTuple
 import numpy as np
 import pandas as pd
 
-from common import peloton_logins
+from common import csv_path, peloton_logins
 
 
 # https://docs.github.com/en/issues/planning-and-tracking-with-projects/
@@ -247,7 +247,7 @@ class ProjectItem:
 
 
 def main():
-    table = pd.read_csv("peloton.csv")
+    table = pd.read_csv(csv_path)
     # table = table[:40]
 
     project_items: List[ProjectItem] = ProjectItem.items_from_table(table)

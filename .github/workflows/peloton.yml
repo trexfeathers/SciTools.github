@@ -5,7 +5,7 @@ on:
 
   push:
     branches:
-      - "peloton_GHA"
+      - "populate"
 
 jobs:
   update_peloton_project:
@@ -27,17 +27,11 @@ jobs:
           conda install -c conda-forge --file peloton/requirements.txt
 
       - name: "Query GitHub"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python peloton/query.py
 
-      - name: "Add issue 4000"
+      - name: "Populate Peloton Project"
         env:
           GITHUB_TOKEN: ${{ secrets.PROJECT_WRITE_PERMISSIONS }}
-        run: |
-          gh api graphql -f query='
-            mutation {
-              addProjectV2ItemById(input: {projectId: "PVT_kwDOABU7f84ALhAI" contentId: "MDU6SXNzdWU4MDcxMTY2Mzg="}) {
-                item {
-                  id
-                }
-              }
-            }'
+        run: python peloton/populate.py

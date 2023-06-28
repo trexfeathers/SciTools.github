@@ -5,15 +5,13 @@ Query the GitHub API for issue and PR data to inform managing SciTools.
 import datetime
 from itertools import chain
 from os import environ
-from pathlib import Path
 import re
 
 from github import Github
 import pandas as pd
 
-from common import peloton_repos
+from common import csv_path, peloton_repos
 
-CSV_PATH = Path(__file__).parent / "peloton.csv"
 
 issue_keys_keep = [
     "node_id",
@@ -120,4 +118,4 @@ if __name__ == "__main__":
     )
     issues_df = issues_df.join(assignee_counts_str, on="assignee_logins")
 
-    issues_df.to_csv(CSV_PATH)
+    issues_df.to_csv(csv_path)
