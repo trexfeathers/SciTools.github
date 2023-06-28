@@ -23,7 +23,7 @@ jobs:
 
       - name: "Set up environment"
         run:
-          conda activate
+          source $CONDA/bin/activate base
           conda install -c conda-forge --file peloton/requirements.txt
 
       - name: "Query GitHub"
