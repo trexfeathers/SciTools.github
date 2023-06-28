@@ -4,6 +4,7 @@ Query the GitHub API for issue and PR data to inform managing SciTools.
 
 import datetime
 from itertools import chain
+from os import environ
 from pathlib import Path
 import re
 
@@ -15,6 +16,7 @@ from common import peloton_repos
 CSV_PATH = Path(__file__).parent / "peloton.csv"
 
 issue_keys_keep = [
+    "node_id",
     "html_url",
     "number",
     "title",
@@ -30,9 +32,10 @@ issue_keys_keep = [
 if __name__ == "__main__":
     since = datetime.datetime.now() - datetime.timedelta(weeks=6)
 
-    # TODO: allow this to work with GHA OR a user's local token.
-    token_path = Path().home() / ".api_keys" / "github-token.txt"
-    github_token = token_path.read_text().strip()
+    github_token = environ.get("GH_TOKEN") or environ.get("GITHUB_TOKEN")
+    if github_token is None:
+        message = "Please set the GH_TOKEN or GITHUB_TOKEN environment variable."
+        raise EnvironmentError(message)
     g = Github(github_token)
 
     issue_dicts = []
@@ -102,4 +105,19 @@ if __name__ == "__main__":
             issue_dicts.append(issue_dict)
 
     issues_df = pd.DataFrame(issue_dicts)
+
+    open_df = issues_df[issues_df["state"] == "open"]
+    assigned_df = open_df[open_df["assignee_logins"] != ""]
+    assignee_counts = (assigned_df["assignee_logins"].value_counts())
+    assignee_counts_str = pd.Series(
+        [
+            f"{count:0>3d} - {assignee}"
+            for assignee, count
+            in assignee_counts.items()
+        ],
+        index=assignee_counts.index,
+        name="assignee_count",
+    )
+    issues_df = issues_df.join(assignee_counts_str, on="assignee_logins")
+
     issues_df.to_csv(CSV_PATH)

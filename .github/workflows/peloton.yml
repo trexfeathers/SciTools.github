@@ -8,7 +8,7 @@ on:
       - "peloton_GHA"
 
 jobs:
-  update_peloton_project_board:
+  update_peloton_project:
     name: "Update Peloton Project Board"
 
     runs-on: ubuntu-latest
@@ -18,6 +18,17 @@ jobs:
         shell: bash -l {0}
 
     steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v3
+
+      - name: "Set up environment"
+        run:
+          conda activate
+          conda install -c conda-forge --file peloton/requirements.txt
+
+      - name: "Query GitHub"
+        run: python peloton/query.py
+
       - name: "Add issue 4000"
         env:
           GITHUB_TOKEN: ${{ secrets.PROJECT_WRITE_PERMISSIONS }}
