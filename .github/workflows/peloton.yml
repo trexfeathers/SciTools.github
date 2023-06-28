@@ -29,9 +29,9 @@ jobs:
       - name: "Query GitHub"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: python peloton/query.py
+        run: $CONDA/bin/python peloton/query.py
 
       - name: "Populate Peloton Project"
         env:
           GITHUB_TOKEN: ${{ secrets.PROJECT_WRITE_PERMISSIONS }}
-        run: python peloton/populate.py
+        run: $CONDA/bin/python peloton/populate.py
