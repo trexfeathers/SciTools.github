@@ -28,10 +28,10 @@ jobs:
 
       - name: "Query GitHub"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: $CONDA/bin/python peloton/query.py
 
       - name: "Populate Peloton Project"
         env:
-          GITHUB_TOKEN: ${{ secrets.PROJECT_WRITE_PERMISSIONS }}
+          GH_TOKEN: ${{ secrets.PROJECT_WRITE_PERMISSIONS }}
         run: $CONDA/bin/python peloton/populate.py
