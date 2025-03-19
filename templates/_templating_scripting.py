@@ -3,6 +3,7 @@
 """
 import argparse
 import json
+from os import environ
 from pathlib import Path
 import shlex
 from subprocess import CalledProcessError, check_output, run
@@ -127,19 +128,21 @@ def notify_updates() -> None:
 def prompt_share() -> None:
     """Make a PR author aware that they are modifying a templated file.
 
-    This function is intended for running on a 'target repo'.
+    This function is intended for running on a PR on a 'target repo'.
     """
     def gh_json(sub_command: str, field: str) -> dict:
         command = shlex.split(f"gh {sub_command} --json {field}")
         return json.loads(check_output(command))
 
-    pr_url = urlparse(gh_json("pr view", "url")["url"])
-    _, org, repo, pull, pr_number = pr_url.path.split("/")
+    pr_number = environ["PR_NUMBER"]
+
+    pr_url = urlparse(gh_json(f"pr view {pr_number}", "url")["url"])
+    _, org, repo, pull, _ = pr_url.path.split("/")
     pr_short_name = f"{org}/{repo}#{pr_number}"
 
-    author = gh_json("pr view", "author")["author"]["login"]
+    author = gh_json(f"pr view {pr_number}", "author")["author"]["login"]
 
-    changed_files = gh_json("pr view", "files")["files"]
+    changed_files = gh_json(f"pr view {pr_number}", "files")["files"]
     changed_paths = [Path(file["path"]) for file in changed_files]
 
     def issue_exists(title: str) -> bool:
@@ -244,7 +247,7 @@ def main() -> None:
     prompt = subparsers.add_parser(
         "prompt-share",
         description="Make a PR author aware that they are modifying a templated file.",
-        epilog="This command is intended for running on a 'target repo'."
+        epilog="This command is intended for running on a PR on a 'target repo'."
     )
     prompt.set_defaults(func=prompt_share)
 
