@@ -85,7 +85,7 @@ def notify_updates() -> None:
         issue_title = f"The Template for `{template.name}` has been updated"
         template_relative = template.relative_to(TEMPLATE_REPO_ROOT)
         template_url = (
-            f"{SCITOOLS_URL}/SciTools.github/blob/main/{template_relative}"
+            f"{SCITOOLS_URL}/SciTools.github/blob/demo_templating/{template_relative}"
         )
         template_link = f"[`{template_relative}`]({template_url})"
         issue_body = (
@@ -97,7 +97,7 @@ def notify_updates() -> None:
             f"```diff\n{diff}\n```"
         )
         for repo, path_in_repo in templatees:
-            file_url = f"{SCITOOLS_URL}/{repo}/blob/main/{path_in_repo}"
+            file_url = f"{SCITOOLS_URL}/{repo}/blob/demo_templating/{path_in_repo}"
             file_link = f"[`{path_in_repo}`]({file_url})"
             with NamedTemporaryFile("w") as file_write:
                 file_write.write(issue_body.format(file_link=file_link))
@@ -170,7 +170,7 @@ def prompt_share(args: argparse.Namespace) -> None:
         if is_templated:
             template_relative = template.relative_to(TEMPLATE_REPO_ROOT)
             template_url = (
-                f"{SCITOOLS_URL}/SciTools.github/blob/main/{template_relative}"
+                f"{SCITOOLS_URL}/SciTools.github/blob/demo_templating/{template_relative}"
             )
             template_link = f"[`{template_relative}`]({template_url})"
 
@@ -212,7 +212,7 @@ def prompt_share(args: argparse.Namespace) -> None:
                     continue
 
                 templates_relative = TEMPLATES_DIR.relative_to(TEMPLATE_REPO_ROOT)
-                templates_url = f"{SCITOOLS_URL}/SciTools.github/tree/main/{templates_relative}"
+                templates_url = f"{SCITOOLS_URL}/SciTools.github/tree/demo_templating/{templates_relative}"
                 templates_link = f"[`{templates_relative}/`]({templates_url})"
                 issue_body = (
                     f"{pr_short_name} (by @{author}) includes changes to "
