@@ -182,7 +182,7 @@ def prompt_share(args: argparse.Namespace) -> None:
                 continue
 
             issue_body = (
-                f"{pr_short_name} (by {author}) includes changes to "
+                f"{pr_short_name} (by @{author}) includes changes to "
                 f"`{changed_path}`. This file is templated by {template_link}. "
                 "Please either:\n\n"
                 "- Action this issue with a pull request applying the changes "
@@ -215,7 +215,7 @@ def prompt_share(args: argparse.Namespace) -> None:
                 templates_url = f"{SCITOOLS_URL}/SciTools.github/tree/main/{templates_relative}"
                 templates_link = f"[`{templates_relative}/`]({templates_url})"
                 issue_body = (
-                    f"{pr_short_name} (by {author}) includes changes to "
+                    f"{pr_short_name} (by @{author}) includes changes to "
                     f"`{changed_path}`. This file is not currently templated, "
                     "but its parent directory suggests it may be a good "
                     "candidate. Please either:\n\n"
