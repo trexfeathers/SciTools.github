@@ -3,7 +3,7 @@ name: Check diff between latest commits and create an issue if the is a differen
 on:
   push:
     branches:
-      - main
+      - demo_templating
     paths:
       - templates/**
 
@@ -21,12 +21,12 @@ jobs:
         # Needed for HEAD^1
         fetch-depth: 2
 
-    - name: Generate Token
-      id: generate_token
-      uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a
-      with:
-        app_id: ${{ secrets.AUTH_APP_ID }}
-        private_key: ${{ secrets.AUTH_APP_PRIVATE_KEY }}
+#    - name: Generate Token
+#      id: generate_token
+#      uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a
+#      with:
+#        app_id: ${{ secrets.AUTH_APP_ID }}
+#        private_key: ${{ secrets.AUTH_APP_PRIVATE_KEY }}
 
     - name: Set up Python
       # templates/_templating_scripting.py only needs builtins to run.
@@ -35,5 +35,5 @@ jobs:
     - name: Diff and Create GitHub Issues
       id: create_issues
       env:
-        GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+        GITHUB_TOKEN: ${{ secrets.SCITOOLS_CI_MIMIC }}
       run: templates/_templating_scripting.py notify-updates

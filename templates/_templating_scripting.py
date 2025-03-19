@@ -11,7 +11,7 @@ from typing import NamedTuple
 from urllib.parse import urlparse
 
 
-SCITOOLS_URL = "https://github.com/SciTools"
+SCITOOLS_URL = "https://github.com/trexfeathers"
 TEMPLATES_DIR = Path(__file__).parent.resolve()
 TEMPLATE_REPO_ROOT = TEMPLATES_DIR.parent
 
@@ -106,7 +106,7 @@ def notify_updates() -> None:
                     "gh issue create "
                     f'--title "{issue_title}" '
                     f"--body-file {file_write.name} "
-                    f"--repo SciTools/{repo} "
+                    f"--repo trexfeathers/{repo} "
                     f'--label "Bot" '
                     f'--label "Type: Infrastructure" '
                 )
@@ -143,7 +143,7 @@ def prompt_share() -> None:
     def issue_exists(title: str) -> bool:
         # Check that an issue with this title isn't already on the .github repo.
         existing_issues = gh_json(
-            "issue list --state all --repo SciTools/.github", "title"
+            "issue list --state all --repo trexfeathers/.github", "title"
         )
         return any(issue["title"] == title for issue in existing_issues)
 
@@ -155,7 +155,7 @@ def prompt_share() -> None:
                 "gh issue create "
                 f'--title "{title}" '
                 f"--body-file {file_write.name} "
-                "--repo SciTools/.github"
+                "--repo trexfeathers/.github"
             )
             run(gh_command, check=True)
 
