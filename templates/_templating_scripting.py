@@ -3,7 +3,6 @@
 """
 import argparse
 import json
-from os import environ
 from pathlib import Path
 import shlex
 from subprocess import CalledProcessError, check_output, run
@@ -125,7 +124,7 @@ def notify_updates() -> None:
                         raise
 
 
-def prompt_share() -> None:
+def prompt_share(args: argparse.Namespace) -> None:
     """Make a PR author aware that they are modifying a templated file.
 
     This function is intended for running on a PR on a 'target repo'.
@@ -134,7 +133,7 @@ def prompt_share() -> None:
         command = shlex.split(f"gh {sub_command} --json {field}")
         return json.loads(check_output(command))
 
-    pr_number = environ["PR_NUMBER"]
+    pr_number = args.pr_number
 
     pr_url = urlparse(gh_json(f"pr view {pr_number}", "url")["url"])
     _, org, repo, pull, _ = pr_url.path.split("/")
@@ -249,13 +248,18 @@ def main() -> None:
         description="Make a PR author aware that they are modifying a templated file.",
         epilog="This command is intended for running on a PR on a 'target repo'."
     )
+    prompt.add_argument(
+        "pr_number",
+        type=int,
+        help="The number of the PR to prompt the author of."
+    )
     prompt.set_defaults(func=prompt_share)
 
     # TODO: command to check templates/ dir aligns with _templating_config.json.
     #  Run this on PRs for the .github repo.
 
     parsed = parser.parse_args()
-    parsed.func()
+    parsed.func(parsed)
 
 
 if __name__ == "__main__":
