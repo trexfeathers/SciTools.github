@@ -85,7 +85,7 @@ def notify_updates() -> None:
         issue_title = f"The Template for `{template.name}` has been updated"
         template_relative = template.relative_to(TEMPLATE_REPO_ROOT)
         template_url = (
-            f"{SCITOOLS_URL}/.github/blob/main/{template_relative}"
+            f"{SCITOOLS_URL}/SciTools.github/blob/main/{template_relative}"
         )
         template_link = f"[`{template_relative}`]({template_url})"
         issue_body = (
@@ -147,7 +147,7 @@ def prompt_share(args: argparse.Namespace) -> None:
     def issue_exists(title: str) -> bool:
         # Check that an issue with this title isn't already on the .github repo.
         existing_issues = gh_json(
-            "issue list --state all --repo trexfeathers/.github", "title"
+            "issue list --state all --repo trexfeathers/SciTools.github", "title"
         )
         return any(issue["title"] == title for issue in existing_issues)
 
@@ -159,7 +159,7 @@ def prompt_share(args: argparse.Namespace) -> None:
                 "gh issue create "
                 f'--title "{title}" '
                 f"--body-file {file_write.name} "
-                "--repo trexfeathers/.github "
+                "--repo trexfeathers/SciTools.github "
                 f"--assignee {author}"
             )
             run(gh_command, check=True)
@@ -170,7 +170,7 @@ def prompt_share(args: argparse.Namespace) -> None:
         if is_templated:
             template_relative = template.relative_to(TEMPLATE_REPO_ROOT)
             template_url = (
-                f"{SCITOOLS_URL}/.github/blob/main/{template_relative}"
+                f"{SCITOOLS_URL}/SciTools.github/blob/main/{template_relative}"
             )
             template_link = f"[`{template_relative}`]({template_url})"
 
@@ -212,7 +212,7 @@ def prompt_share(args: argparse.Namespace) -> None:
                     continue
 
                 templates_relative = TEMPLATES_DIR.relative_to(TEMPLATE_REPO_ROOT)
-                templates_url = f"{SCITOOLS_URL}/.github/tree/main/{templates_relative}"
+                templates_url = f"{SCITOOLS_URL}/SciTools.github/tree/main/{templates_relative}"
                 templates_link = f"[`{templates_relative}/`]({templates_url})"
                 issue_body = (
                     f"{pr_short_name} (by {author}) includes changes to "
