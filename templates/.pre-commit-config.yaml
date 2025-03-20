@@ -5,7 +5,7 @@
 
 ci:
   autofix_prs: false
-  autoupdate_commit_msg: "DEMO: update pre-commit hooks"
+  autoupdate_commit_msg: "DEMO2: update pre-commit hooks"
 
 
 # Alphabetised, for lack of a better order.
